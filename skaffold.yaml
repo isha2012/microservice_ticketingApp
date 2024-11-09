@@ -1,0 +1,31 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+# deploy:
+#   kubectl:
+#     manifests:
+#       - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: isha7876/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: isha7876/client
+      context: ./ticketing-client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: './ticketing-client/src/**/*.tsx'
+            dest: .
+manifests:
+  rawYaml:
+    - ./infra/k8s/*
+deploy:
+  kubectl: {}
